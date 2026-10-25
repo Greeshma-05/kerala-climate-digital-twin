@@ -1,0 +1,14 @@
+.venv/
+.git/
+.vercel/
+__pycache__/
+**/__pycache__/
+*.pyc
+.env
+.env.*
+.streamlit/secrets.toml
+data/
+tests/
+docs/
+requirements-lock.txt
+render.yaml

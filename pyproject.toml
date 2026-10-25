@@ -1,0 +1,3 @@
+# Dependencies remain in requirements.txt for all deployment platforms.
+[tool.vercel]
+entrypoint = "vercel_app:app"

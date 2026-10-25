@@ -10,7 +10,7 @@ import pydeck as pdk
 import streamlit as st
 
 from collect_weather import collect_all
-from config import DB_PATH, REPORT_PATH, TIMEZONE
+from config import DB_PATH, ON_VERCEL, REPORT_PATH, TIMEZONE
 from districts import DISTRICTS, DISTRICT_NAMES
 from processing import latest_current
 from storage import load_weather
@@ -77,6 +77,10 @@ st.markdown('<div class="eyebrow">INDIA DIGITAL TWIN / KERALA PILOT</div>', unsa
 st.title("A closer look at Kerala’s weather.")
 st.markdown('<div class="intro">Explore weather across 14 districts. A first step toward a digital twin for climate adaptation.</div>',
             unsafe_allow_html=True)
+
+if ON_VERCEL:
+    st.info("Hosted demo: weather history is temporary and may reset after reconnecting. "
+            "Collect weather if the dashboard is empty, and download any records you need to keep.")
 
 try:
     weather = load_weather()

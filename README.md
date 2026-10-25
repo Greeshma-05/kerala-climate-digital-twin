@@ -4,6 +4,8 @@ A working Python prototype for **AI-Powered Digital Twin of India for Climate Ch
 
 The prototype collects weather from Open-Meteo, validates and processes it with pandas, saves it in SQLite and CSV, and displays it in a Streamlit dashboard with Plotly charts and a PyDeck map. This phase builds the data foundation: it does not yet implement an AI model, climate simulation, or disaster prediction.
 
+For **Vercel**, start with [the Vercel deployment guide](docs/VERCEL_DEPLOYMENT.md). The repository includes an ASGI entry point for the existing Streamlit dashboard. Cloud data is temporary and browser sessions are subject to function duration limits.
+
 To publish the live dashboard from GitHub, follow [the deployment guide](docs/DEPLOYMENT.md). It includes the repository, Streamlit settings, sharing options and cloud-storage limitations.
 
 For Render hosting, the repository also includes a free demo service configuration in `render.yaml`; follow [the Render deployment guide](docs/RENDER_DEPLOYMENT.md). This option retains the existing Streamlit app.
@@ -50,7 +52,7 @@ Open **http://localhost:8501**. Stop the server with **Ctrl+C**. You can also st
 | `pydeck` | Interactive geographic point map |
 | Python standard library | `sqlite3`, `json`, `datetime`, `pathlib`, `unittest`, and others |
 
-`requirements.txt` contains compatible version ranges. `requirements-lock.txt` records the exact environment used for verification; it is optional and may require a matching Python/platform combination.
+`requirements.txt` contains compatible version ranges, with Streamlit pinned to the version tested for hosting. `requirements-lock.txt` records the exact environment used for verification; it is optional and may require a matching Python/platform combination.
 
 ## 2. What you should see
 
@@ -84,6 +86,10 @@ The app flags records older than two hours and lists missing or failed districts
 ```text
 project/
 ├── app.py                    # Streamlit dashboard
+├── vercel_app.py             # ASGI entry point for Vercel
+├── vercel.json               # Vercel function settings
+├── pyproject.toml            # Selects the Vercel entry point
+├── .vercelignore             # Excludes local files from Vercel uploads
 ├── collect_weather.py        # API requests and collection command
 ├── config.py                 # Paths, variables, API URL, timezone
 ├── districts.py              # All 14 representative locations
@@ -92,7 +98,7 @@ project/
 ├── requirements.txt          # Dependency ranges
 ├── requirements-lock.txt     # Exact verified environment
 ├── render.yaml               # Optional Render hosting configuration
-├── .python-version           # Python version for Render
+├── .python-version           # Python version for Render and Vercel
 ├── .streamlit/config.toml    # Dashboard theme
 ├── .gitignore               # Exclude environment and generated data
 ├── docs/
@@ -100,11 +106,14 @@ project/
 │   ├── WALKTHROUGH.md        # Step-by-step explanation of each module
 │   ├── VERIFICATION.md       # Actual collection and test results
 │   ├── DEPLOYMENT.md         # GitHub and Streamlit hosting instructions
-│   └── RENDER_DEPLOYMENT.md  # Alternative Render hosting instructions
+│   ├── RENDER_DEPLOYMENT.md  # Alternative Render hosting instructions
+│   └── VERCEL_DEPLOYMENT.md  # Vercel deployment and limitations
 ├── tests/
 │   ├── __init__.py           # Makes tests importable as a package
 │   ├── test_pipeline.py     # Validation, storage, failure tests
-│   └── test_dashboard.py    # Dashboard rendering and filter tests
+│   ├── test_dashboard.py    # Dashboard rendering and filter tests
+│   ├── test_hosting.py      # Local/cloud data-directory checks
+│   └── check_vercel_server.py # Optional HTTP/WebSocket integration check
 └── data/                    # Created when collection runs
     ├── weather.sqlite3      # Main database
     ├── weather.csv          # Export of all database rows

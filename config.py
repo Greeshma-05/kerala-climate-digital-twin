@@ -2,9 +2,14 @@
 
 import os
 from pathlib import Path
+import tempfile
 
 ROOT = Path(__file__).resolve().parent
-DATA_DIR = Path(os.environ.get("KERALA_DATA_DIR", str(ROOT / "data")))
+ON_VERCEL = os.environ.get("VERCEL") == "1"
+# Vercel's application files are read-only. Its temporary directory is writable,
+# but is neither permanent nor shared between separate function instances.
+DEFAULT_DATA_DIR = Path(tempfile.gettempdir()) / "kerala-climate-twin" if ON_VERCEL else ROOT / "data"
+DATA_DIR = Path(os.environ.get("KERALA_DATA_DIR", str(DEFAULT_DATA_DIR)))
 DB_PATH = DATA_DIR / "weather.sqlite3"
 CSV_PATH = DATA_DIR / "weather.csv"
 REPORT_PATH = DATA_DIR / "collection_report.json"

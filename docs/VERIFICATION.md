@@ -28,3 +28,11 @@ The dashboard was also run through Streamlit `AppTest` against the actual collec
 The Streamlit server started successfully on `http://127.0.0.1:8501`. Its `/_stcore/health` endpoint returned `ok`.
 
 The browser automation runtime failed to start in this environment, so there was no browser screenshot or visual confirmation of the external basemap tiles. Component creation was verified by AppTest. Open the dashboard in a browser to verify map tiles, hover tooltips and visual layout on your machine.
+
+## Vercel adapter checks — 25 October 2026
+
+- All **15 automated tests passed**, including new checks that local data paths stay unchanged and Vercel uses writable temporary storage.
+- `python -m tests.check_vercel_server` passed against the real ASGI entry point: frontend HTTP, health endpoint, WebSocket handshake, dashboard execution and 14/14 district coverage using temporary synthetic data.
+- Vercel CLI **65.2.0** detected `vercel_app:app` as a Python application from the repository configuration.
+- A controlled CLI development-server run passed repeated HTTP requests and two dashboard runs over its WebSocket connection.
+- These are local compatibility checks. Vercel cloud deployment, live map tiles, download routing across instances and reconnect behavior still require verification after deployment.

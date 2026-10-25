@@ -18,7 +18,7 @@ app.py → filters, charts, map and downloads
 
 `ROOT` finds the directory containing the code. `DATA_DIR` defaults to its `data/` folder, so running the program from another terminal directory does not accidentally create a second database. An optional `KERALA_DATA_DIR` environment variable lets you use another location.
 
-The file defines the API URL, three requested variables, output paths and timezone. Broad temperature bounds are shared by pandas validation. There are no credentials to configure.
+The file defines the API URL, three requested variables, output paths and timezone. Broad temperature bounds are shared by pandas validation. There are no weather API credentials to configure. On Vercel, `ON_VERCEL` selects a temporary writable data directory; an explicit `KERALA_DATA_DIR` overrides either default.
 
 ## 2. `districts.py`: the geographic input
 
@@ -91,6 +91,10 @@ The **How it works** tab explains what Phase 1 does, its assumptions and the fut
 - `tests/__init__.py` makes the tests importable as a package.
 - `tests/test_pipeline.py` contains synthetic fixtures and data-integrity/failure tests.
 - `tests/test_dashboard.py` uses Streamlit's `AppTest` to exercise the empty state, populated dashboard and filters without a browser. It does not prove that external map tiles render correctly.
+- `vercel_app.py` wraps `app.py` with Streamlit's ASGI interface so Vercel can serve HTTP and WebSocket requests. `pyproject.toml` selects that entry point and `vercel.json` sets its runtime limits and bundle exclusions.
+- `.vercelignore` keeps local data and secrets out of Vercel uploads. `.python-version` chooses the hosting Python version. `render.yaml` is the alternative Render configuration.
+- `tests/test_hosting.py` checks cloud/local data paths, and `tests/check_vercel_server.py` performs an optional real HTTP and WebSocket check using a temporary local server.
+- `docs/VERCEL_DEPLOYMENT.md` and `docs/RENDER_DEPLOYMENT.md` explain their hosting setups and data/session limits.
 
 ## 8. A small learning exercise
 
