@@ -1,0 +1,11 @@
+# Render Blueprint: deploy the existing Streamlit app as a free demo service.
+# Local SQLite/CSV files are temporary on this plan; see docs/RENDER_DEPLOYMENT.md.
+services:
+  - type: web
+    name: kerala-climate-digital-twin
+    runtime: python
+    plan: free
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m streamlit run app.py --server.address 0.0.0.0 --server.port $PORT --server.headless true
+    healthCheckPath: /_stcore/health

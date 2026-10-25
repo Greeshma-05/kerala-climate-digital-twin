@@ -6,6 +6,8 @@ The prototype collects weather from Open-Meteo, validates and processes it with 
 
 To publish the live dashboard from GitHub, follow [the deployment guide](docs/DEPLOYMENT.md). It includes the repository, Streamlit settings, sharing options and cloud-storage limitations.
 
+For Render hosting, the repository also includes a free demo service configuration in `render.yaml`; follow [the Render deployment guide](docs/RENDER_DEPLOYMENT.md). This option retains the existing Streamlit app.
+
 ## 1. Set up and run
 
 Use Python 3.11 or newer, a terminal, and an internet connection for installation and collection. SQLite comes with Python; no database server or API key is needed for the public Open-Meteo endpoint. The free endpoint is intended for non-commercial use; review the [current usage terms](https://open-meteo.com/en/terms) before deployment.
@@ -89,13 +91,16 @@ project/
 ├── storage.py                # SQLite schema, upsert, CSV export
 ├── requirements.txt          # Dependency ranges
 ├── requirements-lock.txt     # Exact verified environment
+├── render.yaml               # Optional Render hosting configuration
+├── .python-version           # Python version for Render
 ├── .streamlit/config.toml    # Dashboard theme
 ├── .gitignore               # Exclude environment and generated data
 ├── docs/
 │   ├── API_GUIDE.md          # Endpoint, parameters, JSON, extraction
 │   ├── WALKTHROUGH.md        # Step-by-step explanation of each module
 │   ├── VERIFICATION.md       # Actual collection and test results
-│   └── DEPLOYMENT.md         # GitHub and Streamlit hosting instructions
+│   ├── DEPLOYMENT.md         # GitHub and Streamlit hosting instructions
+│   └── RENDER_DEPLOYMENT.md  # Alternative Render hosting instructions
 ├── tests/
 │   ├── __init__.py           # Makes tests importable as a package
 │   ├── test_pipeline.py     # Validation, storage, failure tests
