@@ -35,4 +35,15 @@ The browser automation runtime failed to start in this environment, so there was
 - `python -m tests.check_vercel_server` passed against the real ASGI entry point: frontend HTTP, health endpoint, WebSocket handshake, dashboard execution and 14/14 district coverage using temporary synthetic data.
 - Vercel CLI **65.2.0** detected `vercel_app:app` as a Python application from the repository configuration.
 - A controlled CLI development-server run passed repeated HTTP requests and two dashboard runs over its WebSocket connection.
-- These are local compatibility checks. Vercel cloud deployment, live map tiles, download routing across instances and reconnect behavior still require verification after deployment.
+- These checks established local compatibility before the cloud deployment below.
+
+## Vercel production deployment — 25 October 2026
+
+- Public URL: https://kerala-climate-digital-twin.vercel.app
+- Production deployment `dpl_5s31MxxCWBmR2G3UQwYy8QsbSxAD` reached **Ready** in the `greeshma-05s-projects` Hobby workspace.
+- The final configuration uses a Python service in `vercel.json`, a public catch-all rewrite, and `requirements.txt` for dependency installation. The earlier entry-point-only `pyproject.toml` was removed because it took precedence over `requirements.txt` in cloud builds.
+- Requests without Vercel authentication returned **200** for the frontend and **200 / ok** for `/_stcore/health`.
+- A TLS-verified, same-origin WebSocket executed the actual Streamlit dashboard without exceptions. Triggering **Collect weather** completed Open-Meteo collection for **14/14 districts**, and the dashboard reported **14/14 fresh records**.
+- The dashboard emitted one PyDeck map and four Plotly chart elements. Both CSV downloads returned **200**, with 134,281 and 136,143 bytes in this check.
+- `vercel deploy --dry --json` confirmed that local credentials, the virtual environment, SQLite/CSV data and raw responses were excluded from the upload.
+- Browser screenshots, external basemap tile rendering, concurrent users across different instances, and reconnection after the 300-second limit were not verified. Successful CSV downloads in this session do not guarantee shared state across instances. Cloud data remains temporary.

@@ -2,26 +2,30 @@
 
 The project now includes a Vercel entry point for the existing Streamlit dashboard. It uses Streamlit's `st.App` ASGI interface and Vercel's Python/WebSocket runtime support. The dashboard remains in `app.py`.
 
-This setup is for a **Phase 1 demonstration**. The local SQLite database is not a permanent or shared cloud database, and function duration limits can interrupt a browser session. The hosted deployment must be checked after it finishes; a local test is not proof of a successful Vercel deployment.
+**Live deployment:** [kerala-climate-digital-twin.vercel.app](https://kerala-climate-digital-twin.vercel.app), deployed to the `greeshma-05s-projects` Hobby workspace on 25 October 2026. Public HTTP, WebSocket dashboard execution, live collection for all 14 districts and both CSV downloads passed verification. See [the verification record](VERIFICATION.md).
+
+This setup is for a **Phase 1 demonstration**. The local SQLite database is not a permanent or shared cloud database, and function duration limits can interrupt a browser session. Check the hosted dashboard after future deployments as well.
 
 ## 1. What each new file does
 
 | File | Purpose |
 | --- | --- |
 | `vercel_app.py` | Exposes the Streamlit dashboard as an ASGI application that Vercel can load. |
-| `pyproject.toml` | Points Vercel to `vercel_app:app`. Dependencies still come from `requirements.txt`. |
-| `vercel.json` | Sets a 300-second function duration and excludes development files and local data. |
+| `vercel.json` | Defines a Python service at `vercel_app:app`, routes all public paths to it, sets a 300-second function duration, and excludes development files and local data. |
+| `requirements.txt` | Supplies all Python packages installed by the Vercel build. |
 | `.vercelignore` | Keeps the virtual environment, local secrets, data and development files out of CLI uploads. |
 | `.python-version` | Selects Python 3.14, supported by Vercel. |
 
 `requirements.txt` pins Streamlit to the version tested with this adapter. `config.py` uses a directory under `/tmp` when the platform sets `VERCEL=1`, because deployed application files are read-only. `KERALA_DATA_DIR`, if explicitly supplied, still takes precedence.
+
+The `services.dashboard` block owns the Python entry point and `functions` settings. The top-level `rewrites` sends requests to that service. There is no `pyproject.toml`: Vercel gives that file priority over `requirements.txt`, so an entry-point-only file would leave the application dependencies uninstalled.
 
 ## 2. Deploy from GitHub
 
 1. Sign in to [Vercel](https://vercel.com/new) using GitHub.
 2. Import **`Greeshma-05/kerala-climate-digital-twin`**. Authorize Vercel to access this private repository if prompted.
 3. Use branch **`main`** and the repository root as the root directory.
-4. Let Vercel read the Python entry point from `pyproject.toml`. If the UI asks for a framework and has no appropriate Python choice, use **Other**. Do not enter a static output directory or `streamlit run` as a build command.
+4. Let Vercel read the Python service and `vercel_app:app` entry point from `vercel.json`. Do not enter a static output directory or `streamlit run` as a build command.
 5. Leave custom build/install commands unset. The Python runtime installs `requirements.txt`.
 6. Use the **Hobby** plan for the initial non-commercial demo if your account is eligible. Do not add a paid plan or storage service just to import this configuration.
 7. Deploy, read the build logs, and wait for **Ready**. Copy the actual deployment URL that Vercel returns.
@@ -87,6 +91,7 @@ Your original `streamlit run app.py` command also continues to work.
 ## References
 
 - [Vercel Python runtime and entry points](https://vercel.com/docs/functions/runtimes/python)
+- [Vercel service configuration and routing](https://vercel.com/kb/guide/vercel-services)
 - [Vercel WebSocket support and duration limits](https://vercel.com/kb/guide/do-vercel-serverless-functions-support-websocket-connections)
 - [Streamlit ASGI application interface](https://docs.streamlit.io/1.64.0/develop/api-reference/server/st.app)
 - [Vercel function limits](https://vercel.com/docs/functions/limitations)

@@ -2,6 +2,8 @@
 
 A working Python prototype for **AI-Powered Digital Twin of India for Climate Change Adaptation**, starting with Kerala's 14 districts.
 
+**Live dashboard:** [kerala-climate-digital-twin.vercel.app](https://kerala-climate-digital-twin.vercel.app). Choose **Collect weather** if the temporary cloud dataset is empty.
+
 The prototype collects weather from Open-Meteo, validates and processes it with pandas, saves it in SQLite and CSV, and displays it in a Streamlit dashboard with Plotly charts and a PyDeck map. This phase builds the data foundation: it does not yet implement an AI model, climate simulation, or disaster prediction.
 
 For **Vercel**, start with [the Vercel deployment guide](docs/VERCEL_DEPLOYMENT.md). The repository includes an ASGI entry point for the existing Streamlit dashboard. Cloud data is temporary and browser sessions are subject to function duration limits.
@@ -87,8 +89,7 @@ The app flags records older than two hours and lists missing or failed districts
 project/
 ├── app.py                    # Streamlit dashboard
 ├── vercel_app.py             # ASGI entry point for Vercel
-├── vercel.json               # Vercel function settings
-├── pyproject.toml            # Selects the Vercel entry point
+├── vercel.json               # Python service, public routing and function settings
 ├── .vercelignore             # Excludes local files from Vercel uploads
 ├── collect_weather.py        # API requests and collection command
 ├── config.py                 # Paths, variables, API URL, timezone

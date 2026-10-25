@@ -1,9 +1,19 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "vercel_app.py": {
-      "maxDuration": 300,
-      "excludeFiles": "{.venv/**,.git/**,.vercel/**,tests/**,docs/**,data/**,**/__pycache__/**,.streamlit/secrets.toml}"
+  "services": {
+    "dashboard": {
+      "root": ".",
+      "framework": "python",
+      "entrypoint": "vercel_app:app",
+      "functions": {
+        "vercel_app.py": {
+          "maxDuration": 300,
+          "excludeFiles": "{.venv/**,.git/**,.vercel/**,tests/**,docs/**,data/**,**/__pycache__/**,.streamlit/secrets.toml}"
+        }
+      }
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": { "service": "dashboard" } }
+  ]
 }

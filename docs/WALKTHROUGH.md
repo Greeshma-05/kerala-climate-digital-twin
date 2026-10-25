@@ -91,7 +91,7 @@ The **How it works** tab explains what Phase 1 does, its assumptions and the fut
 - `tests/__init__.py` makes the tests importable as a package.
 - `tests/test_pipeline.py` contains synthetic fixtures and data-integrity/failure tests.
 - `tests/test_dashboard.py` uses Streamlit's `AppTest` to exercise the empty state, populated dashboard and filters without a browser. It does not prove that external map tiles render correctly.
-- `vercel_app.py` wraps `app.py` with Streamlit's ASGI interface so Vercel can serve HTTP and WebSocket requests. `pyproject.toml` selects that entry point and `vercel.json` sets its runtime limits and bundle exclusions.
+- `vercel_app.py` wraps `app.py` with Streamlit's ASGI interface so Vercel can serve HTTP and WebSocket requests. `vercel.json` defines one Python service, selects `vercel_app:app`, routes public requests to it, and sets its runtime limits and bundle exclusions. `requirements.txt` supplies its dependencies.
 - `.vercelignore` keeps local data and secrets out of Vercel uploads. `.python-version` chooses the hosting Python version. `render.yaml` is the alternative Render configuration.
 - `tests/test_hosting.py` checks cloud/local data paths, and `tests/check_vercel_server.py` performs an optional real HTTP and WebSocket check using a temporary local server.
 - `docs/VERCEL_DEPLOYMENT.md` and `docs/RENDER_DEPLOYMENT.md` explain their hosting setups and data/session limits.
